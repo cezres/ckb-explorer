@@ -25,10 +25,10 @@ module CkbSync
       end
 
       def update_ckb_transaction_info_and_fee
-        display_inputs_ckb_transaction_ids = CkbTransaction.ungenerated.ids.each_slice(100).map { |ids| [ids] }
+        display_inputs_ckb_transaction_ids = CkbTransaction.ungenerated.ids.each_slice(1000).map { |ids| [ids] }
         Sidekiq::Client.push_bulk("class" => UpdateTransactionDisplayInfosWorker, "args" => display_inputs_ckb_transaction_ids) if display_inputs_ckb_transaction_ids.present?
 
-        transaction_fee_ckb_transaction_ids = CkbTransaction.uncalculated.ids.each_slice(100).map { |ids| [ids] }
+        transaction_fee_ckb_transaction_ids = CkbTransaction.uncalculated.ids.each_slice(1000).map { |ids| [ids] }
         Sidekiq::Client.push_bulk("class" => UpdateTransactionFeeWorker, "args" => display_inputs_ckb_transaction_ids) if transaction_fee_ckb_transaction_ids.present?
       end
 

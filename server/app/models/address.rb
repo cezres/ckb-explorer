@@ -32,5 +32,5 @@ end
 #
 # Indexes
 #
-#  index_addresses_on_address_hash  (address_hash)
+#  index_addresses_on_address_hash  (address_hash) UNIQUE
 #
