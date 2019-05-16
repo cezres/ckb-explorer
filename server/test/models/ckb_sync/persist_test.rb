@@ -537,7 +537,7 @@ module CkbSync
         local_ckb_transactions = local_block.ckb_transactions
 
         assert_changes -> { local_ckb_transactions.reload.pluck(:display_inputs_status).uniq }, from: ["ungenerated"], to: ["generated"] do
-          CkbSync::Persist.update_ckb_transaction_display_inputs(local_ckb_transactions)
+          CkbSync::Persist.update_ckb_transaction_display_infos(local_ckb_transactions)
         end
 
         local_block_cell_inputs = local_ckb_transactions.map(&:display_inputs).flatten

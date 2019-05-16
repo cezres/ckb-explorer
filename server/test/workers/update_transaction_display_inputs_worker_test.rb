@@ -9,15 +9,15 @@ class UpdateTransactionDisplayInputsWorkerTest < ActiveSupport::TestCase
     block = create(:block, :with_block_hash)
     ckb_transactions = create_list(:ckb_transaction, 10, block: block)
 
-    assert_not_nil UpdateTransactionDisplayInputsWorker.perform_async(ckb_transactions.pluck(:id))
-    assert_nil UpdateTransactionDisplayInputsWorker.perform_async(ckb_transactions.pluck(:id))
+    assert_not_nil UpdateTransactionDisplayInfosWorker.perform_async(ckb_transactions.pluck(:id))
+    assert_nil UpdateTransactionDisplayInfosWorker.perform_async(ckb_transactions.pluck(:id))
   end
 
   test "queuing in the transaction_info_updater" do
     block = create(:block, :with_block_hash)
     ckb_transactions = create_list(:ckb_transaction, 10, block: block)
 
-    UpdateTransactionDisplayInputsWorker.perform_async(ckb_transactions.pluck(:id))
+    UpdateTransactionDisplayInfosWorker.perform_async(ckb_transactions.pluck(:id))
 
     assert_equal 1, Sidekiq::Queues["transaction_info_updater"].size
     assert_equal "UpdateTransactionDisplayInputsWorker", Sidekiq::Queues["transaction_info_updater"].first["class"]
@@ -27,8 +27,8 @@ class UpdateTransactionDisplayInputsWorkerTest < ActiveSupport::TestCase
     Sidekiq::Testing.inline! do
       block = create(:block, :with_block_hash)
       ckb_transactions = create_list(:ckb_transaction, 10, block: block)
-      CkbSync::Persist.expects(:update_ckb_transaction_display_inputs).with(ckb_transactions).once
-      UpdateTransactionDisplayInputsWorker.perform_async(ckb_transactions.pluck(:id))
+      CkbSync::Persist.expects(:update_ckb_transaction_display_infos).with(ckb_transactions).once
+      UpdateTransactionDisplayInfosWorker.perform_async(ckb_transactions.pluck(:id))
     end
   end
 end
