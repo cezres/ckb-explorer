@@ -2,14 +2,14 @@ module CkbSync
   class DataSyncWorkerArgsProducer
     include Concurrent::Async
 
-    def initialize(current_worker_args)
+    def initialize(current_sync_numbers)
       super()
-      @current_worker_args = current_worker_args
+      @current_sync_numbers = current_sync_numbers
     end
 
-    def produce_worker_args(numbers)
+    def produce_sync_numbers(numbers)
       numbers.each do |number|
-        @current_worker_args << [CkbSync::Api.instance.get_block_hash(number.to_s)]
+        @current_sync_numbers << CkbSync::Api.instance.get_block_hash(number.to_s)
       end
     end
   end

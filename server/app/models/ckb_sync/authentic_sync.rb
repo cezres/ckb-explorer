@@ -15,11 +15,11 @@ module CkbSync
         ivars =
           (from..to).each_slice(1000).map do |numbers|
             worker_args_producer = CkbSync::DataSyncWorkerArgsProducer.new(worker_args)
-            worker_args_producer.async.produce_worker_args(numbers)
+            worker_args_producer.async.produce_sync_numbers(numbers)
           end
 
-        worker_args_consumer = CkbSync::DataSyncWorkerArgsConsumer.new(worker_args, "CheckBlockWorker", "authentic_sync", "current_authentic_sync_round")
-        worker_args_consumer.consume_worker_args(ivars)
+        worker_args_consumer = CkbSync::BlockHashConsumer.new(worker_args, "CheckBlockWorker", "authentic_sync", "current_authentic_sync_round")
+        worker_args_consumer.consume_block_hashes(ivars)
 
         CkbSync::Persist.update_ckb_transaction_info_and_fee
       end
