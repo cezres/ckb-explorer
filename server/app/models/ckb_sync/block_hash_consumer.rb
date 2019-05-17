@@ -9,9 +9,9 @@ module CkbSync
       @current_round_key = current_round_key
     end
 
-    def sync_block(block_hashes)
-      block_hashes.each do |block_hash|
-        CkbSync::Persist.call(block_hash)
+    def sync_block(block_numbers)
+      block_numbers.each do |block_number|
+        CkbSync::Persist.call(block_number)
       end
     end
 
@@ -28,6 +28,7 @@ module CkbSync
             Rails.cache.delete(@current_round_key)
             task.shutdown && (return)
           end
+          puts "size::::::::#{@current_block_numbers.size}"
           if @current_block_numbers.size >= 100 || ivars.all?(&:complete?)
             args = @current_block_numbers.shift(100)
             if @worker_name == "SaveBlockWorker"

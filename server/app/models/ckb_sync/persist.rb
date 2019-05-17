@@ -1,8 +1,8 @@
 module CkbSync
   class Persist
     class << self
-      def call(block_hash, sync_type = "inauthentic")
-        node_block = CkbSync::Api.instance.get_block(block_hash).to_h.deep_stringify_keys
+      def call(block_number, sync_type = "inauthentic")
+        node_block = CkbSync::Api.instance.get_block_by_number(block_number).to_h.deep_stringify_keys
         save_block(node_block, sync_type)
       end
 

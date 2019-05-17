@@ -9,7 +9,7 @@ module CkbSync
 
     def produce_sync_numbers(numbers)
       numbers.each do |number|
-        @current_sync_numbers << CkbSync::Api.instance.get_block_hash(number.to_s)
+        @current_sync_numbers << number
       end
     end
   end
